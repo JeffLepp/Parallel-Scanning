@@ -1,0 +1,49 @@
+Jefferson Kline - 06/25/25
+
+GOAL:
+
+Trying to get these scanners working in parralel, 8 epson
+scanners in total. Apparently some wizard was able to get 
+this working before but many people have failed afterwards,
+including myself.
+
+PREVIOUS ATTEMPTS:
+
+Tried multithreading with python scripts on Linux and Windows,
+first and most niave approach. It seems the backend of epson
+scanners do not allow for shared global resources on the 
+machine, or something to this effect.
+
+Tried using docker containers to isolate a Scan.py script for 
+each scanner, but I faced a similar issue with shared resources.
+
+LXD live servers suck dont use them
+
+CURRENT ATTEMPT:
+
+Use QEMU/LVM virtual machne manager to assign a VM to each 
+scanner. Used LXD before but had issues actually getting a
+IPv4 connection, it's a headache.
+
+
+NOTES FOR USING VIRT MANAGER:
+
+1. Each USB scanner is assigned directly to the base VM, named scanner-base
+2. scanner-base username is seedscanner and password is Seeds! All derivatives are same
+3. scanner-base has no USB conenctions, eachsubsquent scanning machine attatched to one of 8 scanners
+4. Some scanners may not have backlight or entirely fail on rare occasions, full restart of every VM and Host PC after power cycle on scanner (off then on)
+
+HOW TO LAUNCH:
+
+1. Launch "virt-manager" in Bash by typing just that in console
+2. Double click executable, enter QR codes (scan up to 8, dont fiddle with them unless errors for some reason)
+3. Click enter
+4. Files saved in home/SeedScans
+
+REWORKING SCANNER ID's:
+1. Run scanimage -L for scanner ID's
+2. Run "scanimage -d 'epsonscan2:Perfection V39/GT-S650:001:013:esci2:usb:ES010D:317'   --format=tiff --mode=Color --resolution 75 --source Flatbed > /dev/null
+" with the ID (013) changed accordingly.
+
+Disk space allocation of qcow2 disk images can be found with:
+sudo bash -c 'du -h /var/lib/libvirt/images/*.qcow2'
