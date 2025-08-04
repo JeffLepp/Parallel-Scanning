@@ -12,7 +12,7 @@ VM_IPS=(
   192.168.122.108
 )
 
-# 🔐 Hardcoded sudo password
+# Hardcoded sudo password
 SSHPASS="Seeds!"
 THRESHOLD_GB=1
 
@@ -29,7 +29,7 @@ for ip in "${VM_IPS[@]}"; do
 
   avail_gb=$(ssh -q seedscanner@$ip "df -BG / | awk 'NR==2 {print \$4}' | sed 's/G//'")
   if [[ $avail_gb -lt $THRESHOLD_GB ]]; then
-    echo "⚠️  WARNING: $ip has low free space on / (${avail_gb}G available)"
+    echo "WARNING: $ip has low free space on / (${avail_gb}G available)"
   fi
 
 done
