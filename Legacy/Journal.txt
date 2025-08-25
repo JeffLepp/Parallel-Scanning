@@ -47,3 +47,10 @@ REWORKING SCANNER ID's:
 
 Disk space allocation of qcow2 disk images can be found with:
 sudo bash -c 'du -h /var/lib/libvirt/images/*.qcow2'
+
+TESTING:
+
+ssh seedscanner@192.168.122.101 \
+"bash -lc 'export SCANNER_ID=Blue OUTPUT_FILE=/output/test.tiff; \
+python3 -V; echo START OK; exit 0'"
+

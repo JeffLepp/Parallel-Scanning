@@ -2,14 +2,14 @@
 
 # List of VM names to shut down
 VM_NAMES=(
-  scanner-1
-  scanner-2
-  scanner-3
-  scanner-4
-  scanner-5
-  scanner-6
-  scanner-7
-  scanner-8
+  scanner-1-BLUE
+  scanner-2-ORANGE
+  scanner-3-GRAY
+  scanner-4-GREEN
+  scanner-5-WHITE
+  scanner-6-BLACK
+  scanner-7-YELLOW
+  scanner-8-CRIMSON
 )
 
 echo "Shutting down all VMs..."
