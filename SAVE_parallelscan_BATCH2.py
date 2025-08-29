@@ -211,7 +211,9 @@ def main():
             else:
                 # Legacy mode — sequentially map to scanners 5..8
                 #jobs = [(5 + i, qr) for i, qr in enumerate(qr_codes)]
-                print("Error")
+                print("Error: No color-coded entries found.")
+                error_flag = True
+                continue
 
             if not qr_codes:
                 print("Error: No valid QR codes found.")
