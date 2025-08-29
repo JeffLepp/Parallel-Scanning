@@ -12,8 +12,8 @@ trap '[[ $ran_tmux -eq 1 ]] && "$AFTER"' EXIT HUP INT TERM
 
 SESSION="seedscan"
 PY="${PYTHON_BIN:-python3}"
-B1="$(readlink -f ./SAVE_parallelscan_BATCH1.py)"
-B2="$(readlink -f ./SAVE_parallelscan_BATCH2.py)"
+B1="$(readlink -f ./parallelscan_BATCH1.py)"
+B2="$(readlink -f ./parallelscan_BATCH2.py)"
 
 CMD_B1="bash -lc '$PY \"$B1\"; echo; echo \"[Batch 1 exited] press Ctrl-D to close\"; exec bash'"
 CMD_B2="bash -lc '$PY \"$B2\"; echo; echo \"[Batch 2 exited] press Ctrl-D to close\"; exec bash'"

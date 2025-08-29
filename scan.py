@@ -1,3 +1,5 @@
+#Script that is inserted into each VM controlling each Scanner (Needs to be encapsulated to allow multiple active instances)
+
 import subprocess
 import os
 import sys

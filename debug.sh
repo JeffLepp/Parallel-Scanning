@@ -18,7 +18,7 @@ command -v lsusb >/dev/null || { echo "lsusb not found"; exit 1; }
 
 log ""
 log "********************************************************************"
-log "Welcome, this script will help you find out the ID's for each scanner"
+log "Welcome, this script will help you find out the ID's for each scanner such that we can rewire them."
 log "Each scanner is named as epsonscan2:Perfection V39/GT-S650:001:XYZ:esci2:usb:ES010D:317"
 log "                                           Notice the XYZ here ^^^ "
 log ""
@@ -154,11 +154,26 @@ for uri in "${V39_URIS[@]}"; do
   done
 done
 
-log ""
+printf "\n"
+log "********************************************************************"
 log "All scans have been completed, if you need to double check or see again which scanners are activated with each ID, relaunch this script."
 log "From here, you need to manually change the associated scanner ID's in each VM."
-log "Here is a video link on doing so ... "
-
+log "Press Enter to launch the virtual machine manager and begin associating each ID".
+log "********************************************************************"
 
 read -r _
 nohup virt-manager >/dev/null 2>&1 &
+
+log "********************************************************************"
+log "You will see a menu with 8 virtual machines named after the scanner they control".
+log ""
+log "STEP 1: Double click scanner-1-BLUE and click on the blue information icon on the top left."
+log "STEP 2: On the left, click on the menu choice labeled 'USB 04b8:013d'."
+log "STEP 3: On the bottom right, click 'Remove' and confirm the removal."
+log "STEP 4: On the bottom left, click on 'Add Hardware'"
+log "STEP 5: On the left of the pop-up window, click 'USB Hosting Device'."
+log "Step 6: From the options, click on the Perfection V39 scanner with the ID that correlated to the BLUE scanner."
+log "NOTE: If a popup says this USB device is already in use just continue, you will likely change that as you go through the VM's"
+log ""
+log "Repeat these steps for each Virtual Machine, then power Off/On the computer."
+log "********************************************************************"

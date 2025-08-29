@@ -1,3 +1,6 @@
+# LEGACY VERSION, USE SAVE_parralelscan_BATCH1 for current
+
+
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -132,7 +135,7 @@ def main():
         try:
             if len(sys.argv) == 1:
                 print("BATCH 2: ONLY FOR SCANNERS WHITE, BLACK, YELLOW, and/or CRIMSON")
-                print("Please paste the QR string (ensure QR codes are seperated with single-qoutes):")
+                print("Please scan your QR codes:")
                 raw_qr = input("> ").strip()
             elif len(sys.argv) == 2:
                 raw_qr = sys.argv[1]
