@@ -1,3 +1,5 @@
+Demo: https://youtu.be/M6JMAnmT8rg
+
 # Parallel-Scanning
 Enables parrellel scanning of Epson scanners, designed for Perfection V39 flatbed scanners. While it was designed for the purposes of a specific lab, these files can be used by you too given proper setup. It was made to be reliable and easy to use once configured, but this was done soley by me during my free time from the lab - so it's not perfect or a final product.
 
@@ -34,8 +36,22 @@ colors_parallelscan.py
 
 Journal.txt
 
-
 # Instructions in Instructions folder
 Scanning Instructions.pdf is designed for QR scanning so undergraduate students with no coding experience can use the system at the lab easily - I would suggest making a similar PDF if you successfully implement a similar system to this. 
 
 Parallel Epson V39 Scanner System.pdf is designed to be a general overview of the system and it's dependencies. It provides details on implementing the virtual machines and scanner setup. 
+
+# Dependencies
+In Each Virtual Machine:
+  sane 
+  sane-utils 
+  usbutils 
+  python3 
+  usbreset
+
+On Host Machine (Physical Computer):
+  qemu-kvm 
+  virt-manager 
+  tmux 
+  python3 
+  usbutils
