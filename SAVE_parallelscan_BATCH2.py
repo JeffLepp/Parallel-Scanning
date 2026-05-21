@@ -53,9 +53,24 @@ def validate_qr_string(qr: str) -> bool:
     """QR must be one or more well-formed {...} chunks, no stray braces."""
     return bool(re.fullmatch(r"(\{[^{}]+\})+", qr))
 
+def normalize_qr_string(s: str) -> str:
+    s = s.strip()
+    s = s.replace("[", "{").replace("]", "}")
+    s = (s.replace("!", "1").replace("@", "2")
+           .replace("#", "3").replace("$", "4")
+           .replace("%", "5").replace("^", "6")
+           .replace("&", "7").replace("*", "8")
+           .replace("(", "9").replace(")", "0")
+           .replace("-", "_"))
+
+    return s
+
+def normalize_scanner_colors(scanner_color: str) -> str:
+    return(scanner_color.upper())
+
 def sanitize_filename(qr: str) -> str:
     """Make remote-safe filename (avoid braces, spaces)."""
-    return qr.replace("{", "AAA").replace("}", "BBB").replace(" ", "_")
+    return qr.replace("{", "AAA").replace("}", "BBB").replace(" ", "_").replace("[", "AAA").replace("]", "BBB")
 
 def local_filename(qr: str) -> str:
     """Keep the original content, just replace spaces."""
@@ -92,7 +107,6 @@ def run_scan(scanner_num: int, qr_string: str):
     scanner_folder = DEST_DIR / scanner_color
     scanner_folder.mkdir(parents=True, exist_ok=True)
 
-    # NOTE: use scanner_folder (not DEST_DIR / scanner_folder)
     local_path = scanner_folder / f"{local_safe}.tiff"
     remote_path = f"/output/{remote_safe}.tiff"
 
@@ -233,6 +247,7 @@ def main():
             # Validate duplicates and formatting (show index on error)
             dupe_check = set()
             for idx, qr in enumerate(qr_codes, start=1):
+                qr = normalize_qr_string(qr)
                 if qr in dupe_check:
                     print(f"Error: Duplicate QR detected at position {idx}.")
                     error_flag = True

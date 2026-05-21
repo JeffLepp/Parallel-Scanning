@@ -1,46 +1,56 @@
+# Parallel Scanning
+
 Demo: https://youtu.be/TUId5mshbvU
-See Instructions/Overview.pdf for overview of Parralel Scanning
 
-# Parallel-Scanning
-Enables parrellel scanning of Epson scanners, designed for Perfection V39 flatbed scanners. While it was designed for the purposes of a specific lab, these files can be used by you too given proper setup. It was made to be reliable and easy to use once configured, but this was done soley by me during my free time from the lab - so it's not perfect or a final product.
+Parallel scanning tools for Epson Perfection V39 flatbed scanners. This project was designed for a specific lab setup, but the files can be reused with the right scanner, VM, and host configuration.
 
-Each scanner needs to be associated with a Virtual Machine containing Scan.py (Replace ID within it to match Epson Scanner ID)
-launch.sh will gather virtual machines and allow for running.
+See `Instructions/Overview.pdf` for a system overview.
 
+## Current Workflow
 
-# Files actively used are in the main directory
-launch.sh - what you will call to launch your system
+Run the active scanner console from the repo root:
 
-startVM.sh - shell script to automatically handle VM launching in virt-manager
+```bash
+./launch.sh
+```
 
-closeVM.sh - shell script to automatically close and clean out VM's for state preservation 
+`launch.sh` starts the VMs, opens the two active batch programs in tmux, and shuts the VMs down when the tmux session exits.
 
-debug.sh - shell script to aid in associating each VM and USB scanner address
+Each scanner needs to be associated with a virtual machine containing `scan.py`.
 
-SAVE_parallelscan_BATCH1.py
+## Active Root Files
 
-SAVE_parallelscan_BATCH2.py
+- `launch.sh` - main entrypoint.
+- `SAVE_parallelscan_BATCH1.py` - scanners 1-4.
+- `SAVE_parallelscan_BATCH2.py` - scanners 5-8.
+- `cleaner.sh` - cleans remote VM outputs after scanning.
+- `startVM.sh` / `closeVM.sh` - VM lifecycle helpers.
+- `debug.sh` - scanner ID/debug helper.
+- `scan.py` - script installed/run on each scanner VM.
 
-scan.py (inside each VM)
+Older scan variants live under `Legacy/`.
 
+## Instructions
 
-# Instructions in Instructions folder
-Scanning Instructions.pdf is designed for QR scanning so undergraduate students with no coding experience can use the system at the lab easily - I would suggest making a similar PDF if you successfully implement a similar system to this. 
+The `Instructions/` folder contains PDFs for setup and operator use:
 
-Parallel Epson V39 Scanner System.pdf is designed to be a general overview of the system and it's dependencies. It provides details on implementing the virtual machines and scanner setup. 
+- `Scanning Instructions.pdf` is designed for QR scanning so undergraduate students with no coding experience can use the system in the lab.
+- `Parallel Epson V39 Scanner System.pdf` gives a general overview of the system and its dependencies, including virtual machine and scanner setup.
 
+## Dependencies
 
-# Dependencies
-In Each Virtual Machine:
-  sane 
-  sane-utils 
-  usbutils 
-  python3 
-  usbreset
+In each virtual machine:
 
-On Host Machine (Physical Computer):
-  qemu-kvm 
-  virt-manager 
-  tmux 
-  python3 
-  usbutils
+- `sane`
+- `sane-utils`
+- `usbutils`
+- `python3`
+- `usbreset`
+
+On the host machine:
+
+- `qemu-kvm`
+- `virt-manager`
+- `tmux`
+- `python3`
+- `usbutils`

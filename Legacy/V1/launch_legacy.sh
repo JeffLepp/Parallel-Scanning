@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-AFTER="$(readlink -f ./closeVM.sh)"   # the script you want to run after closing
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$ROOT_DIR"
+
+AFTER="$ROOT_DIR/closeVM.sh"
 chmod +x "$AFTER" 2>/dev/null || true
 
 # Arm trap only after tmux successfully starts so we don't run AFTER on early failures.
 ran_tmux=0
 trap '[[ $ran_tmux -eq 1 ]] && "$AFTER"' EXIT HUP INT TERM
 
-./startVM.sh
+"$ROOT_DIR/startVM.sh"
 
 SESSION="seedscan"
 PY="${PYTHON_BIN:-python3}"
-B1="$(readlink -f ./parallelscan_BATCH1.py)"
-B2="$(readlink -f ./parallelscan_BATCH2.py)"
+B1="$SCRIPT_DIR/parallelscan_BATCH1.py"
+B2="$SCRIPT_DIR/parallelscan_BATCH2.py"
 
 CMD_B1="bash -lc '$PY \"$B1\"; echo; echo \"[Batch 1 exited] press Ctrl-D to close\"; exec bash'"
 CMD_B2="bash -lc '$PY \"$B2\"; echo; echo \"[Batch 2 exited] press Ctrl-D to close\"; exec bash'"
