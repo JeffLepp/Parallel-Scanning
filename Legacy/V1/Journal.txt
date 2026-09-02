@@ -29,7 +29,7 @@ IPv4 connection, it's a headache.
 NOTES FOR USING VIRT MANAGER:
 
 1. Each USB scanner is assigned directly to the base VM, named scanner-base
-2. scanner-base username is seedscanner and password is Seeds! All derivatives are same
+2. scanner-base username is seedscanner. The shared local sudo password is configured in the repository-root .env file, which is not tracked by Git.
 3. scanner-base has no USB conenctions, eachsubsquent scanning machine attatched to one of 8 scanners
 4. Some scanners may not have backlight or entirely fail on rare occasions, full restart of every VM and Host PC after power cycle on scanner (off then on)
 
@@ -53,4 +53,3 @@ TESTING:
 ssh seedscanner@192.168.122.101 \
 "bash -lc 'export SCANNER_ID=Blue OUTPUT_FILE=/output/test.tiff; \
 python3 -V; echo START OK; exit 0'"
-

@@ -1,4 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -uo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+ENV_FILE="${SEEDSCAN_ENV_FILE:-$SCRIPT_DIR/../../.env}"
+
+if [[ ! -r "$ENV_FILE" ]]; then
+  echo "ERROR: Missing $ENV_FILE." >&2
+  exit 1
+fi
+
+# This is a trusted, user-owned Bash configuration file.
+# shellcheck disable=SC1090
+source "$ENV_FILE"
+: "${SEEDSCAN_SUDO_PASSWORD:?SEEDSCAN_SUDO_PASSWORD is not configured in $ENV_FILE}"
 
 VM_NAMES=(
   scanner-1
@@ -11,7 +25,10 @@ VM_NAMES=(
   scanner-8
 )
 
-SSHPASS="Seeds!"
+SSH_OPTIONS=(
+  -o BatchMode=yes
+  -o ConnectTimeout=10
+)
 
 echo "🚀 Starting cleanup + qcow2 compaction..."
 
@@ -22,12 +39,9 @@ for vm in "${VM_NAMES[@]}"; do
   num=$(echo "$vm" | grep -oE '[0-9]+')
   ip="192.168.122.10$num"
 
-  ssh seedscanner@$ip "echo '$SSHPASS' | sudo -S rm -f /output/*.tiff && \
-                       echo '$SSHPASS' | sudo -S journalctl --vacuum-time=5s && \
-                       echo '$SSHPASS' | sudo -S apt clean && \
-                       echo '$SSHPASS' | sudo -S dd if=/dev/zero of=/zerofile bs=1M status=none || true && \
-                       echo '$SSHPASS' | sudo -S rm -f /zerofile && \
-                       df -h /"
+  printf '%s\n' "$SEEDSCAN_SUDO_PASSWORD" \
+    | ssh "${SSH_OPTIONS[@]}" "seedscanner@$ip" \
+        "sudo -S -p '' /bin/sh -c 'rm -f /output/*.tiff && journalctl --vacuum-time=5s && apt-get clean && (dd if=/dev/zero of=/zerofile bs=1M status=none || true) && rm -f /zerofile && df -h /'"
 
   echo "🛑 Shutting down $vm..."
   virsh shutdown "$vm"
@@ -58,6 +72,8 @@ for vm in "${VM_NAMES[@]}"; do
   mv "$disk_path" "${disk_path%.qcow2}-old.qcow2"
   mv "$compacted_path" "$disk_path"
 done
+
+unset SEEDSCAN_SUDO_PASSWORD
 
 echo "✅ All VMs cleaned and disk images compacted."
 echo "🛑 VMs are still powered off. Please restart the host before scanning again to restore USB connections."

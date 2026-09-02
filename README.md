@@ -8,6 +8,15 @@ See `Instructions/Overview.pdf` for a system overview.
 
 ## Current Workflow
 
+Create the host-only environment file once before launching:
+
+```bash
+cp .env.example .env
+chmod 600 .env
+```
+
+Edit `.env` and set the shared scanner-VM sudo password. This file is ignored by Git.
+
 Run the active scanner console from the repo root:
 
 ```bash
